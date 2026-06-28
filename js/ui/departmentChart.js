@@ -27,17 +27,28 @@ export function build(container) {
   };
 }
 
+/** Re-read palette CSS vars and repaint (called on theme switch). */
+export function refreshTheme() {
+  if (!ctx) return;
+  COL = {
+    accent: cssVar('--signal', '#46E0C8'),
+    txt: cssVar('--text-secondary', '#9BA7B4'),
+    txt2: cssVar('--text-primary', '#E6EBF2'),
+  };
+  draw();
+}
+
 export function resize() {
   if (!canvas || !wrap) return;
   const r = wrap.getBoundingClientRect();
   if (!r.width) return;
   dpr = window.devicePixelRatio || 1;
-  W = Math.max(220, r.width);
-  H = Math.max(160, r.height);
+  W = Math.max(180, r.width);
+  H = Math.max(150, r.height);
   canvas.width = Math.round(W * dpr);
   canvas.height = Math.round(H * dpr);
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
+  canvas.style.width = '100%';   // never force the container wider than its column
+  canvas.style.height = '100%';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   draw();
 }

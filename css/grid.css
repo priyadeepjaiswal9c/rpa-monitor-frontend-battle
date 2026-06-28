@@ -1,10 +1,10 @@
 /* grid.css — F8 virtualized grid: header h-sync, fixed-height rows, hairline grid,
    status chips, zebra/hover, alert + receive flash overlays, empty state. */
 
-.grid { flex: 1; display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+.grid { flex: 1; display: flex; flex-direction: column; min-height: 200px; min-width: 0; }
 
 /* header lives outside the vertical scroller; h-synced via translateX */
-.grid-headwrap { overflow: hidden; height: var(--header-h); flex-shrink: 0; background: var(--bg-elevated); border-bottom: 1px solid var(--border-strong); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04); }
+.grid-headwrap { overflow: hidden; height: var(--header-h); flex-shrink: 0; background: var(--bg-elevated); border-bottom: 1px solid var(--border-strong); box-shadow: inset 0 1px 0 var(--inset-top-highlight); }
 .grid-head { display: flex; height: var(--header-h); will-change: transform; }
 .hc { display: flex; align-items: center; gap: 5px; flex: 0 0 auto; height: 100%; padding: 0 var(--cell-pad-x); font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--text-secondary); cursor: pointer; user-select: none; border-right: 1px solid var(--border-subtle); white-space: nowrap; overflow: hidden; }
 .hc:hover { color: var(--text-primary); background: var(--bg-hover); }
@@ -54,6 +54,21 @@
 /* gutter live/alert dots */
 .grid-row.is-recv .gc.gutter::after { background: var(--signal); opacity: 1; box-shadow: 0 0 6px var(--signal); }
 .grid-row.is-alert .gc.gutter::after { background: var(--status-alert); opacity: 1; box-shadow: 0 0 7px var(--status-alert); }
+
+/* responsive — kept HERE (not app.css) because grid.css loads later and would
+   otherwise override app.css media rules at equal specificity. Gives the virtualized
+   viewport a finite height when the page switches to natural document scroll. */
+@media (max-width: 900px) {
+  .grid { flex: none; min-height: 0; }
+  .grid-viewport { flex: none; height: 64vh; }
+}
+@media (max-width: 720px) {
+  .grid-viewport { height: 70vh; }
+}
+@media (max-height: 640px) and (min-width: 901px) {
+  .grid { flex: none; min-height: 0; }
+  .grid-viewport { flex: none; height: 78vh; min-height: 300px; }
+}
 
 /* empty state */
 .grid-empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 3; }

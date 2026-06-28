@@ -19,6 +19,7 @@ import * as perfHud from './ui/perfHud.js';
 import * as layoutManager from './ui/layoutManager.js';
 import * as chart from './ui/departmentChart.js';
 import * as commandPalette from './ui/commandPalette.js';
+import * as theme from './ui/theme.js';
 
 import { exportCurrentView } from './lib/exportCsv.js';
 import * as urlState from './lib/urlState.js';
@@ -134,6 +135,7 @@ function buildCommands() {
   return [
     { label: 'Focus search', hint: '/', run: () => searchBar.focusInput() },
     { label: 'Pause / Resume stream', hint: 'space', run: togglePause },
+    { label: 'Toggle light / dark theme', run: theme.toggle },
     { label: 'Inject demo alert (Feature 3)', run: demoAlert },
     { label: 'Density: Compact', run: () => applyDensity('compact') },
     { label: 'Density: Comfortable', run: () => applyDensity('comfortable') },
@@ -163,6 +165,7 @@ async function init() {
   perfHud.build($('hud'));
   chart.build($('deptChart'));
   inspector.build();
+  theme.build($('themeToggle'), { onChange: () => chart.refreshTheme() });
 
   setLoaderText('Parsing 50,000 baseline rows…');
   let baseline;

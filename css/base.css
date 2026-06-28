@@ -9,7 +9,7 @@
   /* text */
   --text-primary: #E6EBF2; --text-secondary: #9BA7B4; --text-muted: #6E7C8B; --text-muted-strong: #8593A1;
   /* signal (live/active/focus only) */
-  --signal: #46E0C8; --signal-soft: rgba(70, 224, 200, .14); --signal-on-fill: #06231F;
+  --signal: #46E0C8; --signal-soft: color-mix(in srgb, var(--signal) 14%, transparent); --signal-strong: #8FF0DF; --signal-on-fill: #06231F;
   /* semantic status */
   --status-active: #3DD68C; --status-active-bg: #132D21;
   --status-info: #4CCCE6; --status-info-bg: #082C36;
@@ -24,8 +24,40 @@
   --r-panel: 8px; --r-control: 6px; --r-chip: 4px;
   --ease: cubic-bezier(.22, 1, .36, 1);
   --t-micro: 160ms; --t-reflow: 320ms;
+  /* elevation / effects (themed) */
+  --shadow-popup: 0 16px 40px -12px rgba(0, 0, 0, .6);
+  --shadow-modal: 0 30px 80px -20px rgba(0, 0, 0, .7);
+  --shadow-drawer: -20px 0 60px -20px rgba(0, 0, 0, .7);
+  --scrim: rgba(5, 8, 11, .6);
+  --inset-top-highlight: rgba(255, 255, 255, .04);
+  --alert-pulse: rgba(255, 107, 107, .05);
+  --heartbeat-ring: rgba(61, 214, 140, .5);
+  --scrollbar-thumb-hover: #3A4856;
+  color-scheme: dark;
 }
 body.comfortable { --row-h: 36px; --header-h: 40px; --cell-pad-x: 12px; }
+
+/* ===== LIGHT THEME (WCAG-AA verified) ===== */
+:root[data-theme="light"] {
+  --bg-app: #EEF1F4; --bg-app-alt: #E7EBEF; --bg-panel: #F7F9FB;
+  --bg-elevated: #FFFFFF; --bg-hover: #E4E9EE; --bg-active: #D6DEE5;
+  --border-subtle: #DDE3E9; --border-hairline: #CFD7DF; --border-strong: #B4C0CB; --border-signal: #0A7A6B;
+  --text-primary: #0E1620; --text-secondary: #41505E; --text-muted: #5E6C7B; --text-muted-strong: #54626F;
+  --signal: #0A7A6B; --signal-strong: #0A5C50; --signal-on-fill: #E6FBF6;
+  --status-active: #0A7045; --status-active-bg: #DCF1E6;
+  --status-info: #0B6E80; --status-info-bg: #D6EEF3;
+  --status-pending: #7E5A00; --status-pending-bg: #F5EAC9;
+  --status-alert: #B62E1C; --status-alert-bg: #F7DBD6; --status-alert-text: #93281A;
+  --shadow-popup: 0 16px 40px -12px rgba(15, 22, 32, .18);
+  --shadow-modal: 0 30px 80px -20px rgba(15, 22, 32, .28);
+  --shadow-drawer: -20px 0 60px -20px rgba(15, 22, 32, .26);
+  --scrim: rgba(15, 22, 32, .34);
+  --inset-top-highlight: rgba(0, 0, 0, .05);
+  --alert-pulse: rgba(182, 46, 28, .10);
+  --heartbeat-ring: rgba(10, 112, 69, .45);
+  --scrollbar-thumb-hover: #9AA7B4;
+  color-scheme: light;
+}
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
@@ -46,7 +78,7 @@ h1, h2, h3, p { margin: 0; }
 button { font: inherit; color: inherit; }
 a { color: inherit; }
 
-::selection { background: rgba(70, 224, 200, .26); color: #fff; }
+::selection { background: color-mix(in srgb, var(--signal) 26%, transparent); color: var(--text-primary); }
 
 :focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; border-radius: 3px; }
 
@@ -55,7 +87,7 @@ a { color: inherit; }
 ::-webkit-scrollbar { width: 11px; height: 11px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 6px; border: 3px solid var(--bg-app); }
-::-webkit-scrollbar-thumb:hover { background: #3a4856; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
 
 /* icons */
 .ic { width: 18px; height: 18px; display: inline-block; vertical-align: middle; }
@@ -75,9 +107,9 @@ a { color: inherit; }
 .btn:active { transform: translateY(1px); }
 .btn-ic { width: 15px; height: 15px; }
 .btn-ghost { background: transparent; }
-.btn-primary { background: rgba(70, 224, 200, .08); border-color: rgba(70, 224, 200, .34); color: var(--signal); }
-.btn-primary:hover { background: rgba(70, 224, 200, .14); color: #8ff0df; border-color: rgba(70, 224, 200, .5); }
-.btn-primary.is-paused { background: rgba(255, 202, 22, .1); border-color: rgba(255, 202, 22, .4); color: var(--status-pending); }
+.btn-primary { background: color-mix(in srgb, var(--signal) 8%, transparent); border-color: color-mix(in srgb, var(--signal) 34%, transparent); color: var(--signal); }
+.btn-primary:hover { background: color-mix(in srgb, var(--signal) 14%, transparent); color: var(--signal-strong); border-color: color-mix(in srgb, var(--signal) 50%, transparent); }
+.btn-primary.is-paused { background: color-mix(in srgb, var(--status-pending) 12%, transparent); border-color: color-mix(in srgb, var(--status-pending) 40%, transparent); color: var(--status-pending); }
 
 [hidden] { display: none !important; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
