@@ -10,6 +10,7 @@ const KEY = 'layout.v1';
 const panels = []; // {id, label, node, def}
 let saved = {};
 let menuBtn, menuPanel;
+let onToggleCb = null;
 
 export function register(id, label, node, def = true) { panels.push({ id, label, node, def }); }
 
@@ -27,10 +28,12 @@ export function toggle(id) {
   persist.set(KEY, saved);
   apply(p);
   syncMenu();
+  if (onToggleCb) onToggleCb(id, visible(p));
 }
 export const isVisible = (id) => { const p = panels.find((x) => x.id === id); return p ? visible(p) : true; };
 
-export function buildMenu(container) {
+export function buildMenu(container, opts) {
+  onToggleCb = opts && opts.onToggle;
   menuBtn = el('button', { class: 'btn btn-ghost', type: 'button', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
     icon('i-columns', 'btn-ic'), el('span', {}, 'View'));
   menuPanel = el('div', { class: 'menu-panel', hidden: true, role: 'menu' });

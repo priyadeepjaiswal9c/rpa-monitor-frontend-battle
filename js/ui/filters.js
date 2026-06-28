@@ -31,7 +31,7 @@ function buildMulti(f) {
   const selected = new Set();
   const count = el('span', { class: 'fl-count' }, '');
   const btn = el('button', { class: 'fl-btn', type: 'button', 'aria-haspopup': 'listbox', 'aria-expanded': 'false' },
-    el('span', { class: 'fl-label' }, f.label), count, icon('i-chev', 'fl-caret'));
+    icon('i-filter', 'fl-ic'), el('span', { class: 'fl-label' }, f.label), count, icon('i-chev', 'fl-caret'));
   const list = el('div', { class: 'fl-list', role: 'listbox', 'aria-multiselectable': 'true', 'aria-label': f.label });
   for (const v of distinct(f.key)) {
     const cb = el('input', { type: 'checkbox', value: v });
@@ -66,6 +66,7 @@ function buildToggle(t) {
     state = s; valEl.textContent = s || 'All';
     btn.classList.toggle('active', s !== null);
     btn.dataset.state = s || '';
+    btn.setAttribute('aria-label', t.label + ': ' + (s || 'All'));
     pipeline.setToggle(t.key, s); onChange(); scheduleFrame();
   }
   on(btn, 'click', () => set(state === null ? 'Yes' : state === 'Yes' ? 'No' : null));

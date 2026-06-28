@@ -34,12 +34,12 @@ function computeTotalW() {
 }
 
 function buildHeader() {
-  head = el('div', { class: 'grid-head', role: 'row' });
-  head.appendChild(el('span', { class: 'hc gutter' }));
+  head = el('div', { class: 'grid-head', role: 'row', 'aria-rowindex': '1' });
+  head.appendChild(el('span', { class: 'hc gutter', 'aria-hidden': 'true' }));
   hcells = {};
-  for (const c of COLUMNS) {
+  COLUMNS.forEach((c, ci) => {
     const hc = el('span',
-      { class: 'hc hc--' + c.align, role: 'columnheader', tabindex: '0', 'aria-sort': 'none', style: { width: c.w + 'px' } },
+      { class: 'hc hc--' + c.align, role: 'columnheader', tabindex: '0', 'aria-sort': 'none', 'aria-colindex': String(ci + 2), style: { width: c.w + 'px' } },
       el('span', { class: 'hc-label' }, c.label),
       el('span', { class: 'hc-sort' }),
     );
@@ -50,7 +50,7 @@ function buildHeader() {
     });
     head.appendChild(hc);
     hcells[c.key] = hc;
-  }
+  });
   head.style.width = totalW + 'px';
   return el('div', { class: 'grid-headwrap' }, head);
 }
@@ -87,7 +87,7 @@ export function mount(container, opts) {
       el('button', { class: 'btn btn-ghost', id: 'emptyClear' }, 'Clear filters'),
     ),
   );
-  viewport = el('div', { class: 'grid-viewport', role: 'grid', 'aria-label': 'RPA project telemetry', tabindex: '0' }, spacer, track, empty);
+  viewport = el('div', { class: 'grid-viewport', role: 'grid', 'aria-label': 'RPA project telemetry', tabindex: '0', 'aria-colcount': String(COLUMNS.length + 1), 'aria-rowcount': '1' }, spacer, track, empty);
 
   container.append(headwrap, viewport);
 
@@ -150,6 +150,7 @@ export function paint(recvSet) {
   if (n !== _n) {
     spacer.style.height = (n * ROW_H) + 'px';
     empty.hidden = n > 0;
+    viewport.setAttribute('aria-rowcount', String(n + 1));
     _n = n;
   }
   let start = Math.floor(scrollTop / ROW_H) - OVERSCAN;

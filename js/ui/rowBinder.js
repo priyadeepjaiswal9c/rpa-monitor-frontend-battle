@@ -54,6 +54,7 @@ export function buildRow() {
 
   const gutter = document.createElement('span');
   gutter.className = 'gc gutter';
+  gutter.setAttribute('aria-hidden', 'true');
   row.appendChild(gutter);
 
   const cells = new Array(COLUMNS.length);
@@ -69,6 +70,7 @@ export function buildRow() {
     cell.className = cn;
     cell.style.width = c.w + 'px';
     cell.setAttribute('role', 'gridcell');
+    cell.setAttribute('aria-colindex', String(i + 2));
     const t = document.createTextNode('');
     cell.appendChild(t);
     row.appendChild(cell);
@@ -132,4 +134,5 @@ export function bindRow(node, row, absIdx, recvSet) {
 
   node._uid = row.internal_uid;
   node.dataset.idx = absIdx;
+  if (node._ariaRow !== absIdx) { node.setAttribute('aria-rowindex', String(absIdx + 2)); node._ariaRow = absIdx; }
 }

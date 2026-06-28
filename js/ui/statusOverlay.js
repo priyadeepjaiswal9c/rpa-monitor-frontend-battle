@@ -6,7 +6,7 @@
 import * as pauseBuffer from '../core/pauseBuffer.js';
 import { el, icon, on } from '../lib/dom.js';
 
-let btn, btnLabel, btnUse, chipText, demoBtn;
+let btn, btnLabel, btnUse, chipText, demoBtn, lastKey = '';
 
 export function build(container, opts) {
   const onToggle = opts.onToggle, onDemo = opts.onDemo;
@@ -39,12 +39,18 @@ export function setPaused(paused) {
   document.body.classList.toggle('is-paused', paused);
 }
 
-/** Called each frame: keep the status chip current (text-node only). */
+/** Called each frame: keep the status chip current (text-node only).
+ *  Rebuilds the string only when the underlying counts change (avoids per-frame
+ *  toLocaleString allocation while paused). */
 export function update() {
-  let txt = 'LIVE';
   if (pauseBuffer.isPaused()) {
-    txt = 'PAUSED · ' + pauseBuffer.pendingRows().toLocaleString() + ' buffered · ' +
-      pauseBuffer.eventCount().toLocaleString() + ' events';
+    const p = pauseBuffer.pendingRows(), e = pauseBuffer.eventCount();
+    const key = p + ':' + e;
+    if (key === lastKey) return;
+    lastKey = key;
+    chipText.nodeValue = 'PAUSED · ' + p.toLocaleString() + ' buffered · ' + e.toLocaleString() + ' events';
+  } else if (lastKey !== 'live') {
+    lastKey = 'live';
+    chipText.nodeValue = 'LIVE';
   }
-  if (chipText.nodeValue !== txt) chipText.nodeValue = txt;
 }

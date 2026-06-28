@@ -16,6 +16,7 @@
 .fl-btn.active { border-color: var(--border-signal); color: var(--signal); background: rgba(70, 224, 200, .06); }
 .fl-count { font-family: var(--mono); font-size: 11px; }
 .fl-caret { width: 13px; height: 13px; opacity: .7; }
+.fl-ic { width: 13px; height: 13px; opacity: .65; flex-shrink: 0; }
 .fl-panel { position: absolute; left: 0; top: calc(100% + 6px); z-index: 70; width: 244px; max-height: 340px; display: flex; flex-direction: column; background: var(--bg-elevated); border: 1px solid var(--border-strong); border-radius: var(--r-control); box-shadow: 0 18px 46px -14px rgba(0, 0, 0, .65); overflow: hidden; }
 .fl-panel-head { display: flex; align-items: center; justify-content: space-between; padding: 9px 11px; border-bottom: 1px solid var(--border-subtle); font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-secondary); }
 .fl-clearbtn { background: none; border: 0; color: var(--signal); font-size: 11px; cursor: pointer; }

@@ -7,7 +7,7 @@
   /* borders / hairlines */
   --border-subtle: #1A222B; --border-hairline: #222C37; --border-strong: #2E3A47; --border-signal: #46E0C8;
   /* text */
-  --text-primary: #E6EBF2; --text-secondary: #9BA7B4; --text-muted: #5E6B7A; --text-muted-strong: #7A8794;
+  --text-primary: #E6EBF2; --text-secondary: #9BA7B4; --text-muted: #6E7C8B; --text-muted-strong: #8593A1;
   /* signal (live/active/focus only) */
   --signal: #46E0C8; --signal-soft: rgba(70, 224, 200, .14); --signal-on-fill: #06231F;
   /* semantic status */

@@ -8,7 +8,7 @@ import * as pipeline from '../core/pipeline.js';
 import { compact } from '../core/format.js';
 import { el, icon } from '../lib/dom.js';
 
-let canvas, ctx, subT, wrap, throttle = 0, W = 0, H = 0, dpr = 1;
+let canvas, ctx, subT, wrap, throttle = 0, W = 0, H = 0, dpr = 1, COL = null;
 const TOP = 12;
 
 export function build(container) {
@@ -20,6 +20,11 @@ export function build(container) {
   wrap = el('div', { class: 'dept-wrap' }, canvas);
   container.append(head, wrap);
   ctx = canvas.getContext('2d');
+  COL = {
+    accent: cssVar('--signal', '#46E0C8'),
+    txt: cssVar('--text-secondary', '#9BA7B4'),
+    txt2: cssVar('--text-primary', '#E6EBF2'),
+  };
 }
 
 export function resize() {
@@ -75,9 +80,7 @@ function draw() {
   subT.nodeValue = data.length ? 'top ' + data.length + ' · ' + total.toLocaleString() + ' rows' : 'no data';
   if (!data.length) return;
 
-  const accent = cssVar('--signal', '#46E0C8');
-  const txt = cssVar('--text-secondary', '#9BA7B4');
-  const txt2 = cssVar('--text-primary', '#E6EBF2');
+  const accent = COL.accent, txt = COL.txt, txt2 = COL.txt2;
   const max = data[0][1];
   const padY = 6;
   const rowH = Math.min(24, (H - padY * 2) / data.length);
