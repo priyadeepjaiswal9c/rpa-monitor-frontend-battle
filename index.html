@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0B0F14" />
+
+  <title>SENTINEL — Enterprise RPA Telemetry Monitor</title>
+  <meta name="description" content="A high-density, real-time enterprise RPA monitor: a hand-rolled virtualized data grid streaming 50,000 automation projects at 60fps — live KPIs, sorting, filtering, fuzzy search and lossless pause/resume. Vanilla JS, zero data-grid libraries." />
+  <meta name="author" content="Priyadeep Jaiswal" />
+  <link rel="canonical" href="https://priyadeepjaiswal9c.github.io/rpa-monitor-frontend-battle/" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SENTINEL — Enterprise RPA Telemetry Monitor" />
+  <meta property="og:description" content="Real-time virtualized telemetry terminal for 50,000 RPA projects. 60fps, zero memory leaks, vanilla JS — no data-grid libraries." />
+  <meta property="og:url" content="https://priyadeepjaiswal9c.github.io/rpa-monitor-frontend-battle/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SENTINEL — Enterprise RPA Telemetry Monitor" />
+  <meta name="twitter:description" content="Real-time virtualized telemetry terminal for 50,000 RPA projects. Vanilla JS, 60fps, no libraries." />
+
+  <!-- Fonts: preconnect + preload to avoid render-blocking -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
+
+  <link rel="stylesheet" href="css/base.css?v=1" />
+  <link rel="stylesheet" href="css/app.css?v=1" />
+  <link rel="stylesheet" href="css/grid.css?v=1" />
+  <link rel="stylesheet" href="css/controls.css?v=1" />
+  <link rel="stylesheet" href="css/chart.css?v=1" />
+  <link rel="stylesheet" href="css/motion.css?v=1" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SENTINEL — Enterprise RPA Telemetry Monitor",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description": "Real-time virtualized data-grid terminal visualizing a 200ms telemetry firehose over 50,000 RPA automation projects, built in vanilla JavaScript with a hand-rolled row-recycling virtualizer.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+  <!-- ≤500ms loader; content is in the DOM behind it (TTI not blocked) -->
+  <div id="loader" class="loader" role="status" aria-live="polite">
+    <div class="loader-mark"><svg class="ic" aria-hidden="true"><use href="#i-activity" /></svg></div>
+    <p class="loader-text" id="loaderText">Connecting to telemetry firehose…</p>
+    <div class="loader-bar"><span></span></div>
+  </div>
+
+  <!-- ===== Inline SVG sprite (themed to currentColor) ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-activity" viewBox="0 0 24 24"><path d="M2 12h4l2-7 4 14 3-9 2 2h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 2 21 7v10l-9 5-9-5V7zM3 7l9 5 9-5M12 12v10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z" fill="currentColor"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 22 20H2zM12 10v5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17.5" r="1" fill="currentColor"/></symbol>
+      <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+      <symbol id="i-columns" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 4v16M15 4v16" stroke="currentColor" stroke-width="1.4"/></symbol>
+      <symbol id="i-command" viewBox="0 0 24 24"><path d="M9 6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-density" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+      <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z" fill="currentColor"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="3" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="13" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="13" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+      <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 18a8 8 0 1 1 16 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 18l4-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M9 15l6-6M10 6l1-1a4 4 0 0 1 6 6l-1 1M14 18l-1 1a4 4 0 0 1-6-6l1-1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- ===== App shell ===== -->
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark"><svg class="ic" aria-hidden="true"><use href="#i-bolt" /></svg></span>
+      <span class="brand-name">SENTINEL</span>
+      <span class="brand-sub">RPA Telemetry Monitor</span>
+    </div>
+    <div class="header-controls" id="statusControls"></div>
+    <nav class="header-actions" aria-label="View controls">
+      <button class="btn btn-ghost" id="densityBtn" type="button" title="Toggle density"><svg class="btn-ic" aria-hidden="true"><use href="#i-density" /></svg><span>Density</span></button>
+      <div class="view-menu" id="viewMenu"></div>
+      <button class="btn btn-ghost" id="cmdBtn" type="button" title="Command palette (⌘K)"><svg class="btn-ic" aria-hidden="true"><use href="#i-command" /></svg><span>⌘K</span></button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <section class="kpis" id="kpis" aria-label="Live KPIs"></section>
+
+    <div class="toolbar" role="search">
+      <div id="search" class="toolbar-search"></div>
+      <div id="filters" class="toolbar-filters" aria-label="Filters"></div>
+      <div class="toolbar-spacer"></div>
+      <span class="result-count" id="count" aria-live="polite"></span>
+      <button class="btn btn-ghost" id="exportBtn" type="button" title="Export current view as CSV"><svg class="btn-ic" aria-hidden="true"><use href="#i-download" /></svg><span>Export</span></button>
+    </div>
+
+    <div class="workspace">
+      <section class="grid-panel panel" id="gridPanel" aria-label="Telemetry grid">
+        <div class="grid" id="grid"></div>
+      </section>
+
+      <aside class="side" aria-label="Analytics">
+        <section class="panel" id="chartPanel">
+          <div id="deptChart" class="dept"></div>
+        </section>
+        <section class="panel hud-panel" id="hudPanel">
+          <div class="panel-head"><h2 class="panel-title"><svg class="panel-ic" aria-hidden="true"><use href="#i-gauge" /></svg> Live Performance</h2></div>
+          <div id="hud" class="hud"></div>
+          <p class="hud-note">Hand-rolled virtualization · fixed DOM node pool · single rAF</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <span>SENTINEL · Frontend Battle Phase 2 · 50,000-row RPA telemetry · vanilla JS, zero data-grid libraries</span>
+    <a class="foot-link" id="repoLink" href="https://github.com/priyadeepjaiswal9c/rpa-monitor-frontend-battle" target="_blank" rel="noopener"><svg class="ic-sm" aria-hidden="true"><use href="#i-link" /></svg> Repository</a>
+  </footer>
+
+  <!-- Provided pipeline engine — loaded VERBATIM, before the app module -->
+  <script src="dataStream.js"></script>
+  <script type="module" src="js/main.js?v=1"></script>
+</body>
+</html>

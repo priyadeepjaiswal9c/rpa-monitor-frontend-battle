@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://priyadeepjaiswal9c.github.io/rpa-monitor-frontend-battle/sitemap.xml
