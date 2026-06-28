@@ -20,6 +20,7 @@ import * as layoutManager from './ui/layoutManager.js';
 import * as chart from './ui/departmentChart.js';
 import * as commandPalette from './ui/commandPalette.js';
 import * as theme from './ui/theme.js';
+import * as analytics from './ui/analytics.js';
 
 import { exportCurrentView } from './lib/exportCsv.js';
 import * as urlState from './lib/urlState.js';
@@ -75,6 +76,7 @@ function clearAll() {
 /* ---------- interactions ---------- */
 function togglePause() {
   if (pauseBuffer.isPaused()) {
+    analytics.close(); // the analytics overlay shows a frozen snapshot — close it on resume
     const s = pauseBuffer.resume();
     statusOverlay.setPaused(false);
     if (s.distinct) toast('Resumed · flushed ' + s.distinct.toLocaleString() + ' buffered rows (' + s.events.toLocaleString() + ' events)');
@@ -89,6 +91,11 @@ function onRowClick(uid) {
   else toast('⏸  Pause the stream to inspect a row');
 }
 
+function openAnalytics() {
+  if (pauseBuffer.isPaused()) analytics.toggle();
+  else toast('⏸  Pause the stream to open the analytics view');
+}
+
 function demoAlert() {
   const n = pipeline.length(); if (!n) return;
   grid.scrollToTop();
@@ -96,7 +103,7 @@ function demoAlert() {
   const row = store.getSlot(pipeline.slotAt(idx));
   if (!row) return;
   store.flagDemoAlert(row.internal_uid);
-  toast('Feature 3 demo: alert injected on a visible row (dataset has no Failed / negative-ROI rows)');
+  toast('Demo: alert injected on a visible row (the dataset has no Failed / negative-ROI rows)');
   setTimeout(() => store.clearDemoAlert(row.internal_uid), 4500);
 }
 
@@ -136,7 +143,8 @@ function buildCommands() {
     { label: 'Focus search', hint: '/', run: () => searchBar.focusInput() },
     { label: 'Pause / Resume stream', hint: 'space', run: togglePause },
     { label: 'Toggle light / dark theme', run: theme.toggle },
-    { label: 'Inject demo alert (Feature 3)', run: demoAlert },
+    { label: 'Inject demo alert', run: demoAlert },
+    { label: 'Open analytics dashboard (while paused)', run: openAnalytics },
     { label: 'Density: Compact', run: () => applyDensity('compact') },
     { label: 'Density: Comfortable', run: () => applyDensity('comfortable') },
     { label: 'Export current view (CSV)', run: () => toast('Exported ' + exportCurrentView().toLocaleString() + ' rows') },
@@ -165,6 +173,7 @@ async function init() {
   perfHud.build($('hud'));
   chart.build($('deptChart'));
   inspector.build();
+  analytics.build();
   theme.build($('themeToggle'), { onChange: () => chart.refreshTheme() });
 
   setLoaderText('Parsing 50,000 baseline rows…');
@@ -198,6 +207,7 @@ async function init() {
   on($('exportBtn'), 'click', () => toast('Exported ' + exportCurrentView().toLocaleString() + ' rows (current view)'));
   on($('densityBtn'), 'click', () => { applyDensity(density === 'compact' ? 'comfortable' : 'compact'); saveUrlState(); });
   on($('cmdBtn'), 'click', () => commandPalette.show());
+  on($('analyticsBtn'), 'click', openAnalytics);
 
   grid.refreshSort(sortControls.get());
   updateCount();
