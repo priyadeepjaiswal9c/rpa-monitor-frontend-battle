@@ -39,13 +39,14 @@
 .gc.gutter { flex: 0 0 var(--gutter-w); padding: 0; border-right: 0; justify-content: center; }
 .gc.gutter::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: transparent; opacity: 0; transition: opacity .5s ease; }
 
-/* status chip: color + glyph + label */
-.gc--status { gap: 6px; font-family: var(--mono); font-size: 11px; font-weight: 500; }
-.gc--status::before { content: '●'; font-size: 8px; line-height: 1; }
-.gc--status.st-active { color: var(--status-active); }
-.gc--status.st-completed { color: var(--status-info); }
-.gc--status.st-planned { color: var(--status-pending); }
-.gc--status.st-alert { color: var(--status-alert); }
+/* status pill: tinted rounded chip (dot + label) */
+.gc--status { overflow: visible; }
+.st-chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; font-family: var(--mono); font-size: 10.5px; font-weight: 500; line-height: 1.5; max-width: 100%; }
+.st-chip::before { content: '●'; font-size: 7px; line-height: 1; flex-shrink: 0; }
+.st-chip.st-active { color: var(--status-active); background: color-mix(in srgb, var(--status-active) 14%, transparent); }
+.st-chip.st-completed { color: var(--status-info); background: color-mix(in srgb, var(--status-info) 13%, transparent); }
+.st-chip.st-planned { color: var(--status-pending); background: color-mix(in srgb, var(--status-pending) 16%, transparent); }
+.st-chip.st-alert { color: var(--status-alert); background: color-mix(in srgb, var(--status-alert) 16%, transparent); }
 
 /* bool */
 .gc.bl-yes { color: var(--status-active); }

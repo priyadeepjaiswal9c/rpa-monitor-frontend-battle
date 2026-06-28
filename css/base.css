@@ -1,19 +1,21 @@
 /* base.css — design tokens (contrast-verified), reset, typography, buttons, scrollbars. */
 
 :root {
-  /* surfaces (cool blue-graphite; never pure black) */
-  --bg-app: #0B0F14; --bg-app-alt: #0E131A; --bg-panel: #11161D;
-  --bg-elevated: #171E26; --bg-hover: #1B232D; --bg-active: #222C37;
+  /* surfaces (deep blue-graphite) */
+  --bg-app: #0A0E13; --bg-app-alt: #0E131A; --bg-panel: #11161D;
+  --bg-elevated: #19212A; --bg-hover: #1B232D; --bg-active: #2A3540;
   /* borders / hairlines */
-  --border-subtle: #1A222B; --border-hairline: #222C37; --border-strong: #2E3A47; --border-signal: #46E0C8;
+  --border-subtle: #1A222B; --border-hairline: #1E2730; --border-strong: #2A3540; --border-signal: #46E0C8;
   /* text */
-  --text-primary: #E6EBF2; --text-secondary: #9BA7B4; --text-muted: #6E7C8B; --text-muted-strong: #8593A1;
-  /* signal (live/active/focus only) */
+  --text-primary: #E8EDF4; --text-secondary: #9AA7B4; --text-muted: #6B7785; --text-muted-strong: #8593A1;
+  /* signal mint + purple secondary accent */
   --signal: #46E0C8; --signal-soft: color-mix(in srgb, var(--signal) 14%, transparent); --signal-strong: #8FF0DF; --signal-on-fill: #06231F;
+  --accent2: #9B8CFF; --accent2-soft: color-mix(in srgb, var(--accent2) 16%, transparent);
+  --grad-accent: linear-gradient(90deg, transparent, var(--signal), var(--accent2), transparent);
   /* semantic status */
   --status-active: #3DD68C; --status-active-bg: #132D21;
   --status-info: #4CCCE6; --status-info-bg: #082C36;
-  --status-pending: #FFCA16; --status-pending-bg: #302008;
+  --status-pending: #FFC857; --status-pending-bg: #2E2510;
   --status-alert: #FF6B6B; --status-alert-bg: #3B1219; --status-alert-text: #FF9592;
   /* type */
   --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
@@ -44,6 +46,9 @@ body.comfortable { --row-h: 36px; --header-h: 40px; --cell-pad-x: 12px; }
   --border-subtle: #DDE3E9; --border-hairline: #CFD7DF; --border-strong: #B4C0CB; --border-signal: #0A7A6B;
   --text-primary: #0E1620; --text-secondary: #41505E; --text-muted: #5E6C7B; --text-muted-strong: #54626F;
   --signal: #0A7A6B; --signal-strong: #0A5C50; --signal-on-fill: #E6FBF6;
+  --accent2: #6D5EF0; --accent2-soft: color-mix(in srgb, var(--accent2) 12%, transparent);
+  --grad-accent: linear-gradient(90deg, transparent, var(--signal), var(--accent2), transparent);
+  --status-pending: #7E5A00;
   --status-active: #0A7045; --status-active-bg: #DCF1E6;
   --status-info: #0B6E80; --status-info-bg: #D6EEF3;
   --status-pending: #7E5A00; --status-pending-bg: #F5EAC9;

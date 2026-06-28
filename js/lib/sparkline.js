@@ -16,3 +16,20 @@ export function sparklinePath(values, w, h) {
   }
   return d.trim();
 }
+
+/** Filled-area variant: same line, closed to the baseline for a gradient fill. */
+export function sparklineArea(values, w, h) {
+  const n = values ? values.length : 0;
+  if (n < 2) return '';
+  let min = Infinity, max = -Infinity;
+  for (let i = 0; i < n; i++) { const v = values[i]; if (v < min) min = v; if (v > max) max = v; }
+  const range = max - min || 1;
+  let d = 'M0,' + h + ' ';
+  for (let i = 0; i < n; i++) {
+    const x = (i / (n - 1)) * w;
+    const y = h - ((values[i] - min) / range) * h;
+    d += 'L' + x.toFixed(1) + ',' + y.toFixed(1) + ' ';
+  }
+  d += 'L' + w + ',' + h + ' Z';
+  return d;
+}

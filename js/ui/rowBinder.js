@@ -72,7 +72,15 @@ export function buildRow() {
     cell.setAttribute('role', 'gridcell');
     cell.setAttribute('aria-colindex', String(i + 2));
     const t = document.createTextNode('');
-    cell.appendChild(t);
+    if (c.cls === 'status') {
+      const chip = document.createElement('span');
+      chip.className = 'st-chip';
+      chip.appendChild(t);
+      cell.appendChild(chip);
+      row._statusChip = chip;
+    } else {
+      cell.appendChild(t);
+    }
     row.appendChild(cell);
     cells[i] = cell;
     tnodes[i] = t;
@@ -102,8 +110,7 @@ export function bindRow(node, row, absIdx, recvSet) {
   // status chip color (only on change)
   const sc = statusClass(row);
   if (node._statusCls !== sc) {
-    const cell = node._cells[STATUS_IDX];
-    cell.className = 'gc gc--l gc--status ' + sc;
+    if (node._statusChip) node._statusChip.className = 'st-chip ' + sc;
     node._statusCls = sc;
   }
 

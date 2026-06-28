@@ -15,7 +15,8 @@ const rows = new Map();
 let slotArr = [];
 let N = 0;
 
-const kpi = { streamed: 0, robots: 0, savings: 0, lastTickRows: 0 };
+const kpi = { streamed: 0, robots: 0, savings: 0, avgRoi: 0, lastTickRows: 0 };
+let roiSum = 0; // running sum of received roi_percent (for the weighted-mean ROI KPI)
 
 // uids touched since last frame (rebind if visible) and received this tick (flash).
 let dirty = new Set();
@@ -73,8 +74,10 @@ export function accrueKpis(batch) {
   for (let i = 0; i < batch.length; i++) {
     kpi.robots += batch[i].num.robots_deployed;
     kpi.savings += batch[i].num.annual_savings_usd;
+    roiSum += batch[i].num.roi_percent;
   }
   kpi.streamed += batch.length;
+  kpi.avgRoi = kpi.streamed ? roiSum / kpi.streamed : 0;
   kpi.lastTickRows = batch.length;
 }
 
@@ -93,7 +96,7 @@ export const kpis = () => kpi;
 
 /** Sample current KPIs into the bounded ring (called ~1/sec for sparklines). */
 export function sampleRing() {
-  ring.push({ streamed: kpi.streamed, robots: kpi.robots, savings: kpi.savings });
+  ring.push({ streamed: kpi.streamed, robots: kpi.robots, savings: kpi.savings, avgRoi: kpi.avgRoi });
   if (ring.length > RING) ring.shift();
 }
 export const ringFor = (key) => ring.map((s) => s[key]);
