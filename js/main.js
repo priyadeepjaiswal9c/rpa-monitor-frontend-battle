@@ -32,6 +32,7 @@ const $ = (id) => document.getElementById(id);
 
 let density = 'compact';
 let lastSec = 0;
+let exporting = false;
 const scheduleFrame = () => {}; // continuous rAF loop is always running
 
 /* ---------- loader ---------- */
@@ -105,6 +106,25 @@ function openAnalytics() {
   else toast('⏸  Pause the stream to open the analytics view');
 }
 
+/** Snapshot Export: download the current view (filters + search + multi-sort) as CSV,
+ *  non-blocking (time-sliced) so the live stream never freezes. */
+async function snapshotExport() {
+  if (exporting) return;
+  const total = pipeline.length();
+  if (!total) { toast('Nothing to export — the current view is empty'); return; }
+  exporting = true;
+  toast('Exporting ' + total.toLocaleString() + ' rows…');
+  try {
+    const n = await exportCurrentView();
+    toast('Snapshot exported · ' + n.toLocaleString() + ' rows (current sort + filters)');
+  } catch (e) {
+    console.error('[export]', e);
+    toast('Export failed');
+  } finally {
+    exporting = false;
+  }
+}
+
 function demoAlert() {
   const n = pipeline.length(); if (!n) return;
   grid.scrollToTop();
@@ -140,6 +160,7 @@ function loop(now) {
 /* ---------- global keys ---------- */
 function wireGlobalKeys() {
   on(document, 'keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && (e.key === 's' || e.key === 'S')) { e.preventDefault(); snapshotExport(); return; }
     if (e.target.matches && e.target.matches('input, textarea, [contenteditable]')) return;
     if (e.key === '/') { e.preventDefault(); searchBar.focusInput(); }
     else if (e.key === ' ' && e.target === document.body) { e.preventDefault(); togglePause(); }
@@ -156,7 +177,7 @@ function buildCommands() {
     { label: 'Open analytics dashboard (while paused)', run: openAnalytics },
     { label: 'Density: Compact', run: () => applyDensity('compact') },
     { label: 'Density: Comfortable', run: () => applyDensity('comfortable') },
-    { label: 'Export current view (CSV)', run: () => toast('Exported ' + exportCurrentView().toLocaleString() + ' rows') },
+    { label: 'Snapshot export — CSV of current sort + filters', hint: '⌘S', run: snapshotExport },
     { label: 'Clear all filters & search', run: clearAll },
     { label: 'Scroll to top', run: () => grid.scrollToTop() },
     { label: 'Toggle Department Analytics', run: () => layoutManager.toggle('chart') },
@@ -214,7 +235,7 @@ async function init() {
 
   commandPalette.build(buildCommands());
 
-  on($('exportBtn'), 'click', () => toast('Exported ' + exportCurrentView().toLocaleString() + ' rows (current view)'));
+  on($('exportBtn'), 'click', snapshotExport);
   on($('densityBtn'), 'click', () => { applyDensity(density === 'compact' ? 'comfortable' : 'compact'); saveUrlState(); });
   on($('cmdBtn'), 'click', () => commandPalette.show());
   on($('analyticsBtn'), 'click', openAnalytics);
