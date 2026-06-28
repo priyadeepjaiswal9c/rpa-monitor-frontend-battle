@@ -65,6 +65,15 @@ function applyDensity(d) {
   persist.set('density', density);
 }
 
+/** Collapse the side column when both its panels are hidden, so the grid reclaims the space. */
+function syncSide() {
+  const sideEl = document.querySelector('.side');
+  if (!sideEl) return;
+  const any = layoutManager.isVisible('chart') || layoutManager.isVisible('hud');
+  sideEl.hidden = !any;
+  if (any && layoutManager.isVisible('chart')) chart.resize();
+}
+
 function clearAll() {
   filters.clearAll();
   searchBar.setValue(''); pipeline.setQuery('');
@@ -196,8 +205,9 @@ async function init() {
   layoutManager.register('kpis', 'KPI strip', $('kpis'), true);
   layoutManager.register('chart', 'Department Analytics', $('chartPanel'), true);
   layoutManager.register('hud', 'Performance HUD', $('hudPanel'), true);
-  layoutManager.buildMenu($('viewMenu'), { onToggle: (id, vis) => { if (id === 'chart' && vis) chart.resize(); } });
+  layoutManager.buildMenu($('viewMenu'), { onToggle: () => syncSide() });
   layoutManager.restore();
+  syncSide();
 
   applyDensity(persist.get('density', 'compact'));
   restoreUrlState();
