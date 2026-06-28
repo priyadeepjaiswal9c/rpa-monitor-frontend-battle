@@ -1,13 +1,12 @@
 /**
- * pauseBuffer.js — F5: Pause/Play with lossless, MEMORY-BOUNDED buffering.
+ * pauseBuffer.js — Pause/Play with lossless, memory-bounded buffering.
  *
- * The trap: an append-only queue is lossless but UNBOUNDED — pause for minutes at
- * 50 rows/200ms → millions of entries → heap bloat the judge's Memory panel catches.
- *
- * The answer: coalesce-by-uid Map<uid, latestRow>. Bounded by the dataset (≤ 50k)
- * regardless of pause duration, and lossless in the sense that matters (a snapshot
- * grid shows the LATEST value per row). KPIs still accrue for EVERY captured event
- * (via store.accrueKpis), and scalar counters track sequence/volume for the overlay.
+ * An append-only queue would be lossless but unbounded — pausing for minutes at
+ * 50 rows/200ms would accumulate millions of entries and bloat the heap. Instead we
+ * coalesce by uid into a Map<uid, latestRow>: bounded by the dataset (≤ 50k) regardless
+ * of pause duration, and lossless in the sense that matters (a snapshot grid shows the
+ * latest value per row). KPIs still accrue for every captured event (via store.accrueKpis),
+ * and scalar counters track sequence/volume for the overlay.
  */
 
 import * as store from './store.js';
@@ -26,7 +25,7 @@ export function pause() { paused = true; }
 
 /** Called by main loop while paused: KPIs accrue now; row state is coalesced for later. */
 export function capture(batch) {
-  store.accrueKpis(batch); // every received row counts toward F1 immediately
+  store.accrueKpis(batch); // every received row still counts toward the KPI totals immediately
   for (let i = 0; i < batch.length; i++) buffer.set(batch[i].internal_uid, batch[i]);
   eventsCaptured += batch.length;
   batchesCaptured++;

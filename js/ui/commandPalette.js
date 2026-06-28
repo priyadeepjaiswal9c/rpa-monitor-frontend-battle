@@ -1,5 +1,5 @@
 /**
- * commandPalette.js — differentiator: ⌘K / Ctrl-K command palette.
+ * commandPalette.js — ⌘K / Ctrl-K command palette.
  * Roll-your-own listbox with roving keyboard nav (Up/Down/Enter/Esc), ARIA roles.
  * Commands are supplied by main as [{ label, hint, run }].
  */

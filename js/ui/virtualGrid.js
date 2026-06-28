@@ -1,11 +1,11 @@
 /**
- * virtualGrid.js — F8 (15 pts) + the 50-pt rendering axis.
+ * virtualGrid.js — the virtualized data grid (hand-rolled row recycling).
  *
- * Hand-rolled row recycling: a FIXED pool of row nodes over a tall spacer. Scroll only
- * sets a flag + schedules the shared rAF (passive). The frame does READ (one scrollTop +
- * one scrollLeft) → COMPUTE (pure math) → WRITE (one translateY on the track, one
- * translateX to h-sync the header, nodeValue-only cell binds). DOM node count is constant
- * regardless of the 50k rows → flat heap, no forced reflow, locked 60fps.
+ * A FIXED pool of row nodes is recycled over a tall spacer. Scroll only sets a flag and
+ * schedules the shared rAF (passive). Each frame does READ (one scrollTop + one scrollLeft)
+ * → COMPUTE (pure math) → WRITE (one translateY on the track, one translateX to keep the
+ * header in horizontal sync, nodeValue-only cell binds). The DOM node count stays constant
+ * no matter how many rows the dataset holds, so the heap stays flat and scrolling holds 60fps.
  */
 
 import { COLUMNS } from '../core/schema.js';

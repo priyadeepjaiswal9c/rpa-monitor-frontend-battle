@@ -1,5 +1,5 @@
 /**
- * sortControls.js — F4 (single) + F9 (compound, shift-click).
+ * sortControls.js — column sorting (single + compound shift-click).
  *   click        → sort by this column; toggles asc → desc → off
  *   shift-click  → add/cycle this column as an additional sort key (priority badges)
  * Delegates the math to pipeline (stable compound comparator) and refreshes header carets.

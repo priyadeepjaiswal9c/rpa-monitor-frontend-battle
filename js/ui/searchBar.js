@@ -1,7 +1,7 @@
 /**
- * searchBar.js — F10: multi-token fuzzy search input.
- * Input is rAF-coalesced (NOT debounced) — the scan is sub-5ms in-memory, so debounce
- * would only add artificial latency. Bursts within a frame collapse to one recompute.
+ * searchBar.js — multi-token fuzzy search input.
+ * Input is rAF-coalesced (not debounced) — the in-memory scan is fast, so debounce would
+ * only add artificial latency. Bursts within a frame collapse to one recompute.
  */
 import * as pipeline from '../core/pipeline.js';
 import { el, icon, on } from '../lib/dom.js';

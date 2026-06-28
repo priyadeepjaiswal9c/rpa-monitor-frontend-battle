@@ -1,6 +1,6 @@
 /**
- * exportCsv.js — differentiator: export the CURRENT filtered+sorted view as CSV
- * (client-only Blob download — exporting the *derived* view, not the raw file).
+ * exportCsv.js — export the current filtered+sorted view as CSV
+ * (client-only Blob download — exporting the derived view, not the raw file).
  */
 import { COLUMNS } from '../core/schema.js';
 import * as store from '../core/store.js';

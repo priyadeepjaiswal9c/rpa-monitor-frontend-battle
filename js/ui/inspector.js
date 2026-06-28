@@ -1,9 +1,9 @@
 /**
- * inspector.js — BOUNTY 1: pause-gated row inspector drawer.
+ * inspector.js — pause-gated row inspector drawer.
  * When the stream is paused, clicking a grid row opens an isolated, focus-trapped
- * side drawer that parses & beautifully displays every attribute of that project,
- * plus derived insights and relational context. Reads the store only (no stream
- * coupling); a single reused element (rebuilt on open — infrequent, off the hot path).
+ * side drawer that displays every attribute of that project, plus derived insights and
+ * relational context. Reads the store only (no stream coupling); a single reused element
+ * (rebuilt on open — infrequent, off the hot path).
  */
 import * as store from '../core/store.js';
 import { currency, percent, int } from '../core/format.js';

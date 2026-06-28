@@ -1,12 +1,12 @@
 /**
- * kpiStrip.js — F1: top-row live KPI counters.
+ * kpiStrip.js — top-row live KPI counters.
  *   1. Total Streamed Rows Processed
  *   2. Active Robots Deployed Σ (running sum of robots_deployed received)
  *   3. Global Cumulative Savings (running sum of annual_savings_usd received)
  *
- * Updates via textContent on CACHED leaf nodes only (no re-render). Eased count-up on
+ * Updates via textContent on cached leaf nodes only (no re-render). Eased count-up on
  * the shared rAF, with a document.hidden / reduced-motion fallback that writes the final
- * value directly (so it never freezes at 0 in a throttled/hidden tab).
+ * value directly so it never freezes at 0 in a backgrounded tab.
  */
 
 import * as store from '../core/store.js';

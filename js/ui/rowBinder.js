@@ -1,5 +1,5 @@
 /**
- * rowBinder.js — F2 (sanitation) + F3 (status alerts).
+ * rowBinder.js — cell formatting + status alerts for a grid row.
  *
  * Builds a row's cell skeleton ONCE (cached text nodes) and binds a data row into it
  * with `nodeValue`-only writes, dirty-checked (skip identical cells). No innerHTML, no
@@ -122,7 +122,7 @@ export function bindRow(node, row, absIdx, recvSet) {
   const odd = absIdx & 1;
   if (node._zebra !== odd) { node.classList.toggle('odd', !!odd); node._zebra = odd; }
 
-  // F3 alert + receive flash (paint-only class toggles)
+  // alert + receive flash (paint-only class toggles)
   const isAlert = row._demoAlert === true || row.project_status === ALERT_STATUS || row.num.roi_percent < 0;
   const isRecv = recvSet ? recvSet.has(row.internal_uid) : false;
   const flags = (isAlert ? 'a' : '') + (isRecv ? 'r' : '');

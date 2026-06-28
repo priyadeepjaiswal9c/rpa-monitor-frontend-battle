@@ -16,17 +16,17 @@ export const JUNK_KEYS = [
   'annual_revenue_usd', 'customer_count', 'market_share_percent', 'employee_count', 'founded_year',
 ];
 
-/** F10 fuzzy search targets (per brief). */
+/** Fuzzy search target columns. */
 export const SEARCH_KEYS = ['project_name', 'company_id', 'implementation_partner', 'country'];
 
-/** F7 categorical multi-select filter facets (real cardinalities: 25 / 30 / 26). */
+/** Categorical multi-select filter facets (cardinalities: 25 / 30 / 26). */
 export const FILTER_FIELDS = [
   { key: 'automation_type', label: 'Automation' },
   { key: 'department',      label: 'Department' },
   { key: 'industry',        label: 'Industry' },
 ];
 
-/** F6 "Infrastructure Toggles" — boolean facets. */
+/** Infrastructure toggles — boolean facets. */
 export const TOGGLE_FIELDS = [
   { key: 'ai_enabled',       label: 'AI Enabled' },
   { key: 'cloud_deployment', label: 'Cloud' },
@@ -63,5 +63,5 @@ export const COLUMNS = [
 
 export const COL_BY_KEY = Object.fromEntries(COLUMNS.map((c) => [c.key, c]));
 
-/** F4 explicitly requires these three to be sortable; we make them all sortable. */
+/** Primary numeric sort columns (every column is sortable). */
 export const PRIMARY_SORT_KEYS = ['budget_usd', 'roi_percent', 'employee_hours_saved'];

@@ -1,7 +1,7 @@
 /**
  * store.js — the single source of truth.
  *
- * Memory discipline (the 50-pt axis):
+ * Memory discipline:
  *  - rows: Map<uid,row> bounded by the fixed uid universe (≤ 50k); updated IN PLACE.
  *  - slotArr: dense Array for O(1) slot access (slot = uid number - 1).
  *  - KPI accumulators are scalars; the sparkline ring buffer is bounded (60 samples).
@@ -55,7 +55,7 @@ function updateRow(r) {
   if (ex) {
     // Refresh the numeric shadow in place (preserves cached _hay identity).
     ex.num = r.num;
-    // Defensive: refresh fields that could change (status, roi sign for F3).
+    // Defensive: refresh fields that could change (status, roi sign for alerts).
     ex.project_status = r.project_status;
     ex.roi_percent = r.roi_percent;
     ex._fmt = null; // invalidate lazy format cache for this row-version
@@ -68,7 +68,7 @@ function updateRow(r) {
   received.add(uid);
 }
 
-/** F1: cumulative KPI accumulators over EVERY received row (even while paused). */
+/** Cumulative KPI accumulators over every received row (even while paused). */
 export function accrueKpis(batch) {
   for (let i = 0; i < batch.length; i++) {
     kpi.robots += batch[i].num.robots_deployed;
@@ -103,7 +103,7 @@ export function takeReceived() { const r = received; received = new Set(); retur
 export const peekReceived = () => received;
 export function takeDirty() { const d = dirty; dirty = new Set(); return d; }
 
-/** Demo/QA only (F3): flag a row as a synthetic alert in the VIEW copy. */
+/** Demo/QA only: flag a row as a synthetic alert in the view copy. */
 export function flagDemoAlert(uid) {
   const r = rows.get(uid);
   if (r) { r._demoAlert = true; r._fmt = null; dirty.add(uid); }

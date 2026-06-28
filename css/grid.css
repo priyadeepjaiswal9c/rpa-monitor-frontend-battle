@@ -1,4 +1,4 @@
-/* grid.css — F8 virtualized grid: header h-sync, fixed-height rows, hairline grid,
+/* grid.css — virtualized grid: header h-sync, fixed-height rows, hairline grid,
    status chips, zebra/hover, alert + receive flash overlays, empty state. */
 
 .grid { flex: 1; display: flex; flex-direction: column; min-height: 200px; min-width: 0; }

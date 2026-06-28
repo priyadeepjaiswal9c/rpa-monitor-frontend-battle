@@ -210,26 +210,6 @@ async function init() {
   startStream(onBatch, CSV_URL);
   requestAnimationFrame(loop);
   wireGlobalKeys();
-
-  // Localhost-only verification hook (lets us drive paints without rAF in a hidden
-  // preview tab; absent on the GitHub Pages deploy host — purely a dev aid).
-  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-    window.__rpa = {
-      store, pipeline, grid, pauseBuffer, sortControls, filters, chart,
-      paintNow() {
-        const recv = store.takeReceived();
-        grid.paint(recv); kpiStrip.tick(); statusOverlay.update();
-        return { kpis: store.kpis(), viewLen: pipeline.length() };
-      },
-      pump(count = 20) {
-        const n = store.size(); const batch = [];
-        for (let i = 0; i < count; i++) batch.push(store.getSlot(Math.floor(Math.random() * n)));
-        onBatch(batch); this.paintNow(); return store.kpis();
-      },
-      scrollTo(px) { document.querySelector('.grid-viewport').scrollTop = px; this.paintNow(); return document.querySelector('.grid-track').style.transform; },
-      togglePause, demoAlert, openInspector: (uid) => inspector.openFor(uid),
-    };
-  }
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

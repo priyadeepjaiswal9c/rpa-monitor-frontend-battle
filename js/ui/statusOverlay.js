@@ -1,5 +1,5 @@
 /**
- * statusOverlay.js — F5 controls (Pause/Play + live status chip) and the F3 demo trigger.
+ * statusOverlay.js — Pause/Play controls + live status chip + the demo-alert trigger.
  * The chip shows "LIVE" or "PAUSED · N buffered · M events" (queue sequence tracking).
  * The heartbeat dot pulses while live, holds amber while paused.
  */

@@ -1,10 +1,10 @@
 /**
- * fuzzy.js — F10: multi-token, out-of-order partial search.
+ * fuzzy.js — multi-token, out-of-order partial search.
  *
- * Strategy (research-backed for 50k rows): substring-AND of tokens against a
- * precomputed lowercased haystack. Every token must appear somewhere (AND); tokens
- * may match in any order. Allocation-free, sub-5ms over 50k — no library, no worker.
- * e.g. "tata fin completed cloud" → each token tested independently against row._hay.
+ * Substring-AND of tokens against a precomputed lowercased haystack: every token must
+ * appear somewhere (AND), in any order. Allocation-free and fast over the full dataset —
+ * no library, no worker. e.g. "tata fin completed cloud" → each token tested
+ * independently against row._hay.
  */
 
 export function tokenize(query) {

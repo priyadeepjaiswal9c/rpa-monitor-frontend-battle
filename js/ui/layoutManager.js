@@ -1,5 +1,5 @@
 /**
- * layoutManager.js — F6: operator workspace layout persistence.
+ * layoutManager.js — operator workspace layout persistence.
  * Show/hide panels (KPIs, Department chart, Performance HUD) via a "View" menu;
  * persists visibility to localStorage and restores before paint (survives hard refresh).
  */

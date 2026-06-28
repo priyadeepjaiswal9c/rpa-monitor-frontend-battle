@@ -1,5 +1,5 @@
 /**
- * filters.js — F7 (categorical multi-select) + F6 infrastructure toggles.
+ * filters.js — categorical multi-select dropdowns + infrastructure toggles.
  * Custom dropdowns (no library). Distinct values computed once from the seeded store.
  * Selecting narrows the view via pipeline.setFilter (instant; correct under streaming).
  */

@@ -1,9 +1,8 @@
 /**
- * format.js — F2: Financial & numeric value sanitation.
+ * format.js — financial & numeric value formatting.
  *
- * Performance note (research-backed): constructing Intl formatters is expensive
- * (~28x slower than reuse). We create ONE instance per format at module scope and
- * call .format() in hot paths — zero per-cell allocation, no GC sawtooth.
+ * Constructing Intl formatters is expensive, so we create ONE instance per format at
+ * module scope and call .format() in hot paths — zero per-cell allocation, no GC sawtooth.
  */
 
 const EMPTY = '—';
@@ -20,7 +19,7 @@ export function int(n) {
   return Number.isFinite(n) ? nfInt.format(n) : EMPTY;
 }
 
-/** Locale currency with commas, e.g. $9,557,239 (F2). */
+/** Locale currency with commas, e.g. $9,557,239. */
 export function currency(n) {
   return Number.isFinite(n) ? nfCur.format(n) : EMPTY;
 }
@@ -30,7 +29,7 @@ export function compact(n) {
   return Number.isFinite(n) ? nfCompact.format(n) : EMPTY;
 }
 
-/** roi_percent: clamp to a sane band and round to exactly 2 decimals (F2). */
+/** roi_percent: clamp to a sane band and round to exactly 2 decimals. */
 export function percent(n) {
   if (!Number.isFinite(n)) return EMPTY;
   const c = n < -9999.99 ? -9999.99 : n > 9999.99 ? 9999.99 : n;

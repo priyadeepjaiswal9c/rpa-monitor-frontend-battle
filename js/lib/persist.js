@@ -1,5 +1,5 @@
 /**
- * persist.js — F6: namespaced localStorage with safe JSON + try/catch guards
+ * persist.js — namespaced localStorage with safe JSON + try/catch guards
  * (private mode / quota errors never break the app).
  */
 const NS = 'rpa-monitor:';

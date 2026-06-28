@@ -1,7 +1,7 @@
 /**
- * urlState.js — differentiator: deep-linkable view state in location.hash
+ * urlState.js — deep-linkable view state in location.hash
  * (filters/search/sort/density). Client-only; debounced writes via location.replace
- * so the firehose can't spam browser history.
+ * so the stream can't spam browser history.
  */
 let timer = null;
 

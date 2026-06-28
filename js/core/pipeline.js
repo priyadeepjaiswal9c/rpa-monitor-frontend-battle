@@ -1,13 +1,12 @@
 /**
- * pipeline.js — F4/F7/F9/F10: the derived-view engine.
+ * pipeline.js — the derived-view engine (filtering, search, sorting).
  *
  * Owns the current filter/search/sort inputs and derives `index` (a Uint32Array of
- * slots) in view order. CRITICAL for the 50-pt axis: recompute runs ONLY on user
- * input — never on a 200ms stream tick. The real columns don't drift, so the index
- * stays valid across the firehose; a live value repaints a cell IN PLACE and the row
- * never moves (satisfies "sorted order persists as the stream injects" with zero
- * per-tick sorting). Prefix-narrowing scans the previous result set when the query
- * strictly extends.
+ * slots) in view order. Recompute runs ONLY on user input — never on a stream tick.
+ * The columns don't drift, so the index stays valid as data streams in; a live value
+ * repaints its cell in place and the row never moves, which keeps the sort order stable
+ * under the stream with zero per-tick sorting. Prefix-narrowing scans the previous
+ * result set when the query strictly extends.
  */
 
 import { makeComparator } from '../lib/multiSort.js';

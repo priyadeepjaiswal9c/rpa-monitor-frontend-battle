@@ -1,5 +1,5 @@
 /**
- * multiSort.js — F4 (single) + F9 (shift-click compound) sorting.
+ * multiSort.js — stable single + compound (shift-click) sort comparator.
  *
  * Returns a STABLE compound comparator over slot indices. Stability is guaranteed by
  * an explicit `a - b` (original load order) tiebreak, so equal keys never reshuffle

@@ -1,7 +1,6 @@
 /**
- * perfHud.js — differentiator: a live HUD that makes the invisible engineering visible
- * to judges: FPS, JS heap (guarded — Chrome only), DOM nodes rendered / total, rows/sec.
- * Text-node-only updates; FPS sampled every 500ms.
+ * perfHud.js — a live performance read-out: FPS, JS heap (guarded — Chrome only),
+ * DOM nodes rendered / total, and rows/sec. Text-node-only updates; FPS sampled every 500ms.
  */
 import * as grid from './virtualGrid.js';
 import * as store from '../core/store.js';
